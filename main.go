@@ -20,11 +20,18 @@ import (
 var ks *jsonstore.JSONStore
 
 type Entry struct {
-	Name    string
-	Email   string
-	Message string
-	Date    time.Time
+	Name     string
+	Location string
+	Email    string
+	Message  string
+	Date     time.Time
 }
+
+type Flags struct {
+	OneEntryPerPersonPerDay bool
+}
+
+var flags Flags
 
 func init() {
 	var err error
@@ -32,6 +39,7 @@ func init() {
 	if err != nil {
 		ks = new(jsonstore.JSONStore)
 	}
+	fmt.Println(LocationFromIP("198.199.67.130"))
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -56,25 +64,32 @@ func jsonpHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	if message == "" && name == "" {
 	} else if message != "" && name != "" {
-		var alreadyDid bool
+		alreadyDid := false
 		guestBookLimitString := ipAddress + ":" + r.Header.Get("Referer") + time.Now().Format("2006-01-02")
-		ks.Get(guestBookLimitString, &alreadyDid)
+		if flags.OneEntryPerPersonPerDay {
+			errGet := ks.Get(guestBookLimitString, &alreadyDid)
+			if errGet != nil {
+				alreadyDid = false
+			}
+		}
+		fmt.Println(alreadyDid)
 		if !alreadyDid {
 			ks.Set(guestBookLimitString, true)
 			p := bluemonday.UGCPolicy()
 			entry := Entry{
-				Name:    p.Sanitize(name),
-				Email:   p.Sanitize(email),
-				Message: p.Sanitize(string(blackfriday.Run([]byte(message)))),
-				Date:    time.Now(),
+				Name:     p.Sanitize(name),
+				Email:    p.Sanitize(email),
+				Message:  p.Sanitize(string(blackfriday.Run([]byte(message)))),
+				Location: LocationFromIP(ipAddress),
+				Date:     time.Now(),
 			}
 			ks.Set(r.Header.Get("Referer")+":"+time.Now().String(), entry)
 			go jsonstore.Save(ks, "guestbook.json.gz")
 		} else {
-			userMessage = "Sorry, only one entry per IP address is allowed. You can't sign a Guestbook twice!."
+			userMessage = "Sorry, you can't sign a Guestbook more than once per day!"
 		}
 	} else {
-		userMessage = "Must include name and a message!"
+		userMessage = "Please include name and a message."
 	}
 
 	keys := ks.GetAll(regexp.MustCompile(r.Header.Get("Referer") + ":"))
@@ -114,8 +129,16 @@ func jsonpHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	flags.OneEntryPerPersonPerDay = false
 	http.HandleFunc("/jsonp", jsonpHandler)
-	http.HandleFunc("/", handler)
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		index, _ := ioutil.ReadFile("index.html")
+		fmt.Fprintf(w, string(index))
+	})
+	http.HandleFunc("/guestbook.css", func(w http.ResponseWriter, r *http.Request) {
+		index, _ := ioutil.ReadFile("guestbook.css")
+		fmt.Fprintf(w, string(index))
+	})
 	fmt.Println("Running at :8054")
 	http.ListenAndServe(":8054", nil)
 }
@@ -199,4 +222,35 @@ func getClientIPByHeaders(req *http.Request) (ip string, err error) {
 	err = errors.New("error: Could not find clients IP address from the Request Headers")
 	return "", err
 
+}
+
+func LocationFromIP(ip string) (location string) {
+	type ResultJSON struct {
+		IP          string  `json:"ip"`
+		CountryCode string  `json:"country_code"`
+		CountryName string  `json:"country_name"`
+		RegionCode  string  `json:"region_code"`
+		RegionName  string  `json:"region_name"`
+		City        string  `json:"city"`
+		ZipCode     string  `json:"zip_code"`
+		TimeZone    string  `json:"time_zone"`
+		Latitude    float64 `json:"latitude"`
+		Longitude   float64 `json:"longitude"`
+		MetroCode   int     `json:"metro_code"`
+	}
+	resp, err := http.Get("http://geoip.makemydrive.fun" + "/json/" + ip)
+	if err != nil {
+		return
+	}
+	defer resp.Body.Close()
+	var result ResultJSON
+	err = json.NewDecoder(resp.Body).Decode(&result)
+	if err != nil {
+		return
+	}
+	location = fmt.Sprintf("%s, %s, %s", result.City, result.RegionName, result.CountryName)
+	if len(location) < 5 || err != nil {
+		location = "Unknown"
+	}
+	return
 }
