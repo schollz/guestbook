@@ -315,7 +315,7 @@
       var message = encodeURIComponent(document.querySelector('#Message').value);
       var name = encodeURIComponent(document.querySelector('#Name').value);
       var email = encodeURIComponent(document.querySelector('#Email').value);
-      tag.src = "http://localhost:8054/jsonp?callback=myCallback&message=" + message + "&name=" + name + "&email=" + email;
+      tag.src = "https://guestbook.schollz.com/jsonp?callback=myCallback&message=" + message + "&name=" + name + "&email=" + email;
       document.querySelector("head").appendChild(tag);
     }
     btn.addEventListener("click", jsonp);

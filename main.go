@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"net"
 	"net/http"
 	"net/url"
@@ -34,7 +35,8 @@ func init() {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "HI")
+	index, _ := ioutil.ReadFile("index.html")
+	fmt.Fprintf(w, string(index))
 }
 
 func jsonpHandler(w http.ResponseWriter, r *http.Request) {
