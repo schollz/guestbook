@@ -290,29 +290,32 @@
     <textarea name="Message" rows="20" cols="20" id="Message"></textarea>
     <input type="button" name="submit" value="Submit" id="btn" class="submit-button" />
   </div>
-  <div id="result"></div>
+  <div id="guestbook"></div>
   <script>
     'use strict';
     var btn = document.getElementById("btn");
-    var result = document.getElementById("result");
+    var guestbook = document.getElementById("guestbook");
 
     function myCallback(acptlang) {
-      result.innerHTML = "";
-      console.log(acptlang.length);
-      for (var i = 0; i < acptlang.length; i++) {
-        console.log(acptlang[i].Name);
-        result.innerHTML = result.innerHTML + '<blockquote class="bluejeans">  <strong><span class="Cbluejeans">' + acptlang[i].Name + '</span></strong> (' + acptlang[i].Date.split('T')[0] + ')    ' + acptlang[i].Message + '</blockquote>'
+      if (acptlang.Message != "") {
+        alert(acptlang.Message);
+      }
+      console.log(acptlang);
+      guestbook.innerHTML = "";
+      console.log(acptlang.Entries.length);
+      for (var i = 0; i < acptlang.Entries.length; i++) {
+        guestbook.innerHTML = guestbook.innerHTML + '<blockquote class="bluejeans">  <strong><span class="Cbluejeans"><a href="mailto:'+acptlang.Entries[i].Email+'">' + acptlang.Entries[i].Name + '</a></span></strong> (' + acptlang.Entries[i].Date.split('T')[0] + ')    ' + acptlang.Entries[i].Message + '</blockquote>'
 
       }
     }
 
     function jsonp() {
-      result.innerHTML = "Loading ...";
+      guestbook.innerHTML = "Loading ...";
       var tag = document.createElement("script");
       var message = encodeURIComponent(document.querySelector('#Message').value);
       var name = encodeURIComponent(document.querySelector('#Name').value);
       var email = encodeURIComponent(document.querySelector('#Email').value);
-      tag.src = "http://localhost:8002/jsonp?callback=myCallback&message=" + message + "&name=" + name + "&email=" + email;
+      tag.src = "http://localhost:8054/jsonp?callback=myCallback&message=" + message + "&name=" + name + "&email=" + email;
       document.querySelector("head").appendChild(tag);
     }
     btn.addEventListener("click", jsonp);
