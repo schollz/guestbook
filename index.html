@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Go JSONP Server</title>
+
+  <!-- https://codepen.io/iPawan/pen/emrPKP -->
+
+  <style>
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    body {
+      font: 14px/1.25em sans-serif;
+      margin: auto;
+      max-width: 650px;
+      line-height: 1.6;
+    }
+
+    #contact-area {
+      width: 600px;
+      margin-top: 25px;
+      margin-bottom: 85px;
+    }
+
+    #contact-area input,
+    #contact-area textarea {
+      padding: 5px;
+      width: 471px;
+      font-family: Helvetica, sans-serif;
+      font-size: 1.4em;
+      margin: 0px 0px 10px 0px;
+      border: 2px solid #ccc;
+    }
+
+    #contact-area textarea {
+      height: 90px;
+    }
+
+    #contact-area textarea:focus,
+    #contact-area input:focus {
+      border: 2px solid #900;
+    }
+
+    #contact-area input.submit-button {
+      width: 100px;
+      float: right;
+    }
+
+    label {
+      float: left;
+      text-align: right;
+      margin-right: 15px;
+      width: 100px;
+      padding-top: 5px;
+      font-size: 1.4em;
+    }
+
+
+    blockquote {
+      display: block;
+      background: #fff;
+      padding: 15px 20px 15px 45px;
+      margin: 0 0 20px;
+      position: relative;
+
+      /*Font*/
+      font-family: Georgia, serif;
+      font-size: 14px;
+      line-height: 1.2;
+      color: #666;
+
+      /*Box Shadow - (Optional)*/
+      -moz-box-shadow: 2px 2px 15px #ccc;
+      -webkit-box-shadow: 2px 2px 15px #ccc;
+      box-shadow: 2px 2px 15px #ccc;
+
+      /*Borders - (Optional)*/
+      border-left-style: solid;
+      border-left-width: 15px;
+      border-right-style: solid;
+      border-right-width: 2px;
+    }
+
+    blockquote::before {
+      content: "\201C";
+      /*Unicode for Left Double Quote*/
+      /*Font*/
+      font-family: Georgia, serif;
+      font-size: 60px;
+      font-weight: bold;
+      color: #999;
+
+      /*Positioning*/
+      position: absolute;
+      left: 10px;
+      top: 5px;
+
+    }
+
+    blockquote::after {
+      /*Reset to make sure*/
+      content: "";
+    }
+
+    blockquote a {
+      text-decoration: none;
+      background: #eee;
+      cursor: pointer;
+      padding: 0 3px;
+      color: #c76c0c;
+    }
+
+    blockquote a:hover {
+      color: #666;
+    }
+
+    blockquote em {
+      font-style: italic;
+    }
+
+    /*Default Color Palette*/
+
+    blockquote.default {
+      border-left-color: #656d77;
+      border-right-color: #434a53;
+    }
+
+    /*Grapefruit Color Palette*/
+
+    blockquote.grapefruit {
+      border-left-color: #ed5565;
+      border-right-color: #da4453;
+    }
+
+    /*Bittersweet Color Palette*/
+
+    blockquote.bittersweet {
+      border-left-color: #fc6d58;
+      border-right-color: #e95546;
+    }
+
+    /*Sunflower Color Palette*/
+
+    blockquote.sunflower {
+      border-left-color: #ffcd69;
+      border-right-color: #f6ba59;
+    }
+
+    /*Grass Color Palette*/
+
+    blockquote.grass {
+      border-left-color: #9fd477;
+      border-right-color: #8bc163;
+    }
+
+    /*Mint Color Palette*/
+
+    blockquote.mint {
+      border-left-color: #46cfb0;
+      border-right-color: #34bc9d;
+    }
+
+    /*Aqua Color Palette*/
+
+    blockquote.aqua {
+      border-left-color: #4fc2e5;
+      border-right-color: #3bb0d6;
+    }
+
+    /*Blue Jeans Color Palette*/
+
+    blockquote.bluejeans {
+      border-left-color: #5e9de6;
+      border-right-color: #4b8ad6;
+    }
+
+    /*Lavander Color Palette*/
+
+    blockquote.lavander {
+      border-left-color: #ad93e6;
+      border-right-color: #977bd5;
+    }
+
+    /*Pinkrose Color Palette*/
+
+    blockquote.pinkrose {
+      border-left-color: #ed87bd;
+      border-right-color: #d870a9;
+    }
+
+    /*Light Color Palette*/
+
+    blockquote.light {
+      border-left-color: #f5f7fa;
+      border-right-color: #e6e9ed;
+    }
+
+    /*Gray Color Palette*/
+
+    blockquote.gray {
+      border-left-color: #ccd1d8;
+      border-right-color: #aab2bc;
+    }
+
+
+    /* These CSS classes used just for Demo purpose */
+
+    .heading {
+      font-family: Montez;
+      text-align: center;
+      font-size: 30px;
+    }
+
+    code {
+      color: #da4453;
+    }
+
+    span {
+      font-weight: bolder;
+
+    }
+
+    h1 {
+      text-align: left;
+      font-size: 16px;
+      font-family: 'Francois One', sans-serif;
+    }
+
+    span.Cdefault {
+      color: #434a53;
+    }
+
+    span.Cgrapefruit {
+      color: #da4453;
+    }
+
+    span.Cbittersweet {
+      color: #e95546;
+    }
+
+    span.Csunflower {
+      color: #f6ba59;
+    }
+
+    span.Cgrass {
+      color: #8bc163;
+    }
+
+    span.Cmint {
+      color: #34bc9d;
+    }
+
+    span.Caqua {
+      color: #3bb0d6;
+    }
+
+    span.Cbluejeans {
+      color: #4b8ad6;
+    }
+
+    span.Clavander {
+      color: #977bd5;
+    }
+
+    span.Cpinkrose {
+      color: #d870a9;
+    }
+
+    span.Clight {
+      color: #e6e9ed;
+    }
+
+    span.Cgray {
+      color: #aab2bc;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="contact-area">
+    <label for="Name">Name:</label>
+    <input type="text" name="Name" id="Name" />
+    <label for="Email">Email:</label>
+    <input type="email" name="Email" id="Email" />
+    <label for="Message">Message:</label>
+    <br />
+    <textarea name="Message" rows="20" cols="20" id="Message"></textarea>
+    <input type="button" name="submit" value="Submit" id="btn" class="submit-button" />
+  </div>
+  <div id="result"></div>
+  <script>
+    'use strict';
+    var btn = document.getElementById("btn");
+    var result = document.getElementById("result");
+
+    function myCallback(acptlang) {
+      result.innerHTML = "";
+      console.log(acptlang.length);
+      for (var i = 0; i < acptlang.length; i++) {
+        console.log(acptlang[i].Name);
+        result.innerHTML = result.innerHTML + '<blockquote class="bluejeans">  <strong><span class="Cbluejeans">' + acptlang[i].Name + '</span></strong> (' + acptlang[i].Date.split('T')[0] + ')    ' + acptlang[i].Message + '</blockquote>'
+
+      }
+    }
+
+    function jsonp() {
+      result.innerHTML = "Loading ...";
+      var tag = document.createElement("script");
+      var message = encodeURIComponent(document.querySelector('#Message').value);
+      var name = encodeURIComponent(document.querySelector('#Name').value);
+      var email = encodeURIComponent(document.querySelector('#Email').value);
+      tag.src = "http://localhost:8002/jsonp?callback=myCallback&message=" + message + "&name=" + name + "&email=" + email;
+      document.querySelector("head").appendChild(tag);
+    }
+    btn.addEventListener("click", jsonp);
+    window.onload = jsonp;
+  </script>
+
+
+
+</body>
+
+
+</html>
