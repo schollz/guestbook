@@ -5,29 +5,81 @@
   <title>Guestbook</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    html {
-      line-height: 1.5;
-      max-width: 38rem;
+      body {
+        font: 12apx/1.25em sans-serif;
+        margin: 40px auto;
+        max-width: 650px;
+        line-height: 1.6;
+        font-size: 18px;
+        color: #1b1b1b;
+        padding: 0 10px
+    }
+
+    h1,
+    h2,
+    h3 {
+        line-height: 1.2
+    }
+
+    a {
+        text-decoration: none
+    }
+
+    input,
+    button,textarea {
+      width: 100%;
+        border: 1px;
+        border-color: rgba(0, 0, 0, .1);
+        border-style: solid;
+        padding: 4px;
+        font-size: 26px;
+    }
+
+
+    div.guestbook-comments {
+      max-width: 34em;
+      padding-left: 0;
+    }
+
+    div.guestbook-comment {
+      padding: 2rem;
+      border-color: rgba(0, 0, 0, .1);
+      border-bottom-style: solid;
+      border-bottom-width: 1px;
+      box-sizing: border-box;
+    }
+
+    div.guestbook-comment-text {
+      font-style: italic;
+      display: block;
+      max-width: 30em;
+      font-size: 1rem;
+    }
+
+    div.guestbook-comment-meta {
+      display: block;
+      max-width: 30em;
+      font-size: 1rem;
+      text-align: right;
     }
   </style>
-  <link href="/guestbook.css" rel="stylesheet" type="text/css">
+
 </head>
 
 <body>
   <!-- Start of guestbook -->
   <div class="guestbook">
-
     <h1>Guestbook</h1>
 
     <!-- Guestbook form -->
-    <div class="black-80 measure-wide">
+    <div class="guestbook-form">
       <label for="name" class="guestbook">Name
       </label>
-      <input id="name" class="guestbook" type="text" aria-describedby="name-desc">
+      <input id="name" class="guestbook" type="text" aria-describedby="name-desc" style="width: 100%;">
       <label for="email" class="guestbook">Email
         <span class="guestbook">(optional)</span>
       </label>
-      <input id="email" class="guestbook" type="text" aria-describedby="name-desc">
+      <input id="email" class="guestbook" type="text" aria-describedby="name-desc" style="width:100%;">
       <label for="message" class="guestbook">Message
       </label>
       <textarea id="message" name="message" class="guestbook" aria-describedby="message-desc" rows=4></textarea>
@@ -35,17 +87,55 @@
         <input class="guestbook-button" type="button" id="btn" value="Submit">
       </div>
     </div>
+    <!-- End of Guestbook form -->
 
     <!-- Guestbook comments -->
     <div class="guestbook-comments">
       <div id="guestbook" class="measure-wide">
       </div>
     </div>
+    <!-- End of Guestbook comments -->
 
   </div>
+
+
+  <script>
+    'use strict';
+    // CHANGE THIS TO THE URL YOU WANT!
+    var serverURL = "http://localhost:8054"
+
+
+    var btn = document.getElementById("btn");
+    var guestbook = document.getElementById("guestbook");
+
+    function myCallback(acptlang) {
+      if (acptlang.Message != "") {
+        alert(acptlang.Message);
+      }
+      console.log(acptlang);
+      guestbook.innerHTML = "";
+      console.log(acptlang.Entries.length);
+      for (var i = 0; i < acptlang.Entries.length; i++) {
+        guestbook.innerHTML = guestbook.innerHTML + `<div class="guestbook-comment"> <div class="guestbook-comment-text"> ${acptlang.Entries[i].Message}</div><div class="guestbook-comment-meta"> - ${acptlang.Entries[i].Name}</div><div class="guestbook-comment-meta">${acptlang.Entries[i].DateString}</div><div class="guestbook-comment-meta">${acptlang.Entries[i].Location}</div></div>`
+
+      }
+    }
+
+    function jsonp() {
+      guestbook.innerHTML = "Loading ...";
+      var tag = document.createElement("script");
+      var message = encodeURIComponent(document.querySelector('#message').value);
+      var name = encodeURIComponent(document.querySelector('#name').value);
+      var email = encodeURIComponent(document.querySelector('#email').value);
+      tag.src = `${serverURL}/jsonp?callback=myCallback&message=${message}&name=${name}&email=${name}`;
+      document.querySelector("head").appendChild(tag);
+    }
+    btn.addEventListener("click", jsonp);
+    window.onload = jsonp;
+  </script>
   <!-- End of guestbook -->
-  
-  <script src="/guestbook.js"></script>
+
+
 </body>
 
 </html>
