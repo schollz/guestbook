@@ -1,19 +1,12 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <title>Go JSONP Server</title>
-  <!-- https://codepen.io/iPawan/pen/emrPKP -->
+  <title>Guestbook</title>
   <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
 </head>
-
 <body>
-
-
-
   <article class="pa3 pa5-ns">
     <h1 class="f3 f2-m f1-l">Guestbook</h1>
-
     <div class="black-80 measure-wide">
       <label for="name" class="f6 b db mb2">Name
       </label>
@@ -24,60 +17,16 @@
       <input id="email" class="input-reset ba b--black-20 pa2 mb2 db w-100" type="text" aria-describedby="name-desc">
       <label for="message" class="f6 b db mb2">Message
       </label>
-      <textarea id="message" name="message" class="input-reset ba b--black-20 pa2 mb2 db w-100" aria-describedby="message-desc"></textarea>
+      <textarea id="message" name="message" class="input-reset ba b--black-20 pa2 mb2 db w-100" aria-describedby="message-desc"
+        rows=4></textarea>
       <div class="mt3">
         <input class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6" type="button" id="btn" value="Submit">
       </div>
     </div>
-
-
-
-
     <ul class="list pl0 measure-wide">
       <div id="guestbook" class="measure-wide"></div>
     </ul>
-
-
-
-
-
   </article>
-
-  <script>
-    'use strict';
-    var btn = document.getElementById("btn");
-    var guestbook = document.getElementById("guestbook");
-    var serverURL = "http://localhost:8054"
-
-    function myCallback(acptlang) {
-      if (acptlang.Message != "") {
-        alert(acptlang.Message);
-      }
-      console.log(acptlang);
-      guestbook.innerHTML = "";
-      console.log(acptlang.Entries.length);
-      for (var i = 0; i < acptlang.Entries.length; i++) {
-        guestbook.innerHTML = guestbook.innerHTML + ` <li class="pa3 pa4-ns bb b--black-10"> <span class="f5 db lh-copy measure i"> ${acptlang.Entries[i].Message}</span> <span class="f5 db lh-copy measure tr"> - ${acptlang.Entries[i].Name}</span> <span class="f5 db lh-copy measure tr">${acptlang.Entries[i].DateString}</span> <span class="f5 db lh-copy measure tr">${acptlang.Entries[i].Location}</span></li>`
-
-      }
-    }
-
-    function jsonp() {
-      guestbook.innerHTML = "Loading ...";
-      var tag = document.createElement("script");
-      var message = encodeURIComponent(document.querySelector('#message').value);
-      var name = encodeURIComponent(document.querySelector('#name').value);
-      var email = encodeURIComponent(document.querySelector('#email').value);
-      tag.src = `${serverURL}/jsonp?callback=myCallback&message=${message}&name=${name}&email=${name}`;
-      document.querySelector("head").appendChild(tag);
-    }
-    btn.addEventListener("click", jsonp);
-    window.onload = jsonp;
-  </script>
-
-
-
+  <script src="/guestbook.js"></script>
 </body>
-
-
 </html>
