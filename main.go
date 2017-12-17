@@ -20,11 +20,12 @@ import (
 var ks *jsonstore.JSONStore
 
 type Entry struct {
-	Name     string
-	Location string
-	Email    string
-	Message  string
-	Date     time.Time
+	Name       string
+	Location   string
+	Email      string
+	Message    string
+	DateString string
+	Date       time.Time
 }
 
 type Flags struct {
@@ -99,6 +100,7 @@ func jsonpHandler(w http.ResponseWriter, r *http.Request) {
 	for key := range keys {
 		var entry Entry
 		json.Unmarshal(keys[key], &entry)
+		entry.DateString = entry.Date.Format("January 2, 2006")
 		messages[key] = entry
 		keyList[i] = key
 		i++
@@ -250,7 +252,7 @@ func LocationFromIP(ip string) (location string) {
 	}
 	location = fmt.Sprintf("%s, %s, %s", result.City, result.RegionName, result.CountryName)
 	if len(location) < 5 || err != nil {
-		location = "Unknown"
+		location = ""
 	}
 	return
 }
