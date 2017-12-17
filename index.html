@@ -29,20 +29,16 @@
         <input class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6" type="button" id="btn" value="Submit">
       </div>
     </div>
-<!-- 
-    <article class="mw6-ns br3 hidden ba b--black-10 mv4">
-        <h1 class="f4 bg-near-white br3 br--top black-60 mv0 pv2 ph3">Zack (United States, 2016-04-12)</h1>
-        <div class="pa3 bt b--black-10">
-          <p class="f6 f5-ns lh-copy measure">
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
-            vero eos et accusam et justo duo dolores et ea rebum.
-          </p>
-        </div>
-      </article> -->
 
 
-    <div id="guestbook" class="measure-wide"></div>
+
+
+    <ul class="list pl0 measure-wide">
+      <div id="guestbook" class="measure-wide"></div>
+    </ul>
+
+
+
 
 
   </article>
@@ -60,7 +56,7 @@
       guestbook.innerHTML = "";
       console.log(acptlang.Entries.length);
       for (var i = 0; i < acptlang.Entries.length; i++) {
-        guestbook.innerHTML = guestbook.innerHTML + '<blockquote class="bluejeans" style="margin-top:50px;">' + acptlang.Entries[i].Message + '- <strong><span class="Cbluejeans">' + acptlang.Entries[i].Name + '</span></strong> from ' + acptlang.Entries[i].Location + ' on ' + acptlang.Entries[i].Date.split('T')[0] + '</blockquote>'
+        guestbook.innerHTML = guestbook.innerHTML + ' <li class="pa3 pa4-ns bb b--black-10"> <span class="f5 db lh-copy measure i"> '+acptlang.Entries[i].Message+' </span> <span class="f5 db lh-copy measure tr"> - '+acptlang.Entries[i].Name+', '+acptlang.Entries[i].Location+'</span> <span class="f5 db lh-copy measure tr"> '+acptlang.Entries[i].Date.split('T')[0]+'</span> </li>'
 
       }
     }
