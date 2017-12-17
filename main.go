@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"regexp"
 	"sort"
@@ -38,7 +37,6 @@ func init() {
 	if err != nil {
 		ks = new(jsonstore.JSONStore)
 	}
-	fmt.Println(LocationFromIP("198.199.67.130"))
 }
 
 func jsonpHandler(w http.ResponseWriter, r *http.Request) {
@@ -127,16 +125,13 @@ func main() {
 	flags.OneEntryPerPersonPerDay = false
 	http.HandleFunc("/jsonp", jsonpHandler)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		index, _ := ioutil.ReadFile("index.html")
-		fmt.Fprintf(w, string(index))
+		http.ServeFile(w, r, "index.html")
 	})
 	http.HandleFunc("/guestbook.css", func(w http.ResponseWriter, r *http.Request) {
-		index, _ := ioutil.ReadFile("guestbook.css")
-		fmt.Fprintf(w, string(index))
+		http.ServeFile(w, r, r.URL.Path[1:])
 	})
 	http.HandleFunc("/guestbook.js", func(w http.ResponseWriter, r *http.Request) {
-		index, _ := ioutil.ReadFile("guestbook.js")
-		fmt.Fprintf(w, string(index))
+		http.ServeFile(w, r, r.URL.Path[1:])
 	})
 	fmt.Println("Running at :8054")
 	http.ListenAndServe(":8054", nil)

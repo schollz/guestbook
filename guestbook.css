@@ -1,6 +1,7 @@
 
     div.guestbook {
       padding: 2rem;
+      max-width:38rem;
     }
 
     textarea.guestbook,

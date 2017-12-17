@@ -4,66 +4,7 @@
 <head>
   <title>Guestbook</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-      body {
-        font: 12apx/1.25em sans-serif;
-        margin: 40px auto;
-        max-width: 650px;
-        line-height: 1.6;
-        font-size: 18px;
-        color: #1b1b1b;
-        padding: 0 10px
-    }
-
-    h1,
-    h2,
-    h3 {
-        line-height: 1.2
-    }
-
-    a {
-        text-decoration: none
-    }
-
-    input,
-    button,textarea {
-      width: 100%;
-        border: 1px;
-        border-color: rgba(0, 0, 0, .1);
-        border-style: solid;
-        padding: 4px;
-        font-size: 26px;
-    }
-
-
-    div.guestbook-comments {
-      max-width: 34em;
-      padding-left: 0;
-    }
-
-    div.guestbook-comment {
-      padding: 2rem;
-      border-color: rgba(0, 0, 0, .1);
-      border-bottom-style: solid;
-      border-bottom-width: 1px;
-      box-sizing: border-box;
-    }
-
-    div.guestbook-comment-text {
-      font-style: italic;
-      display: block;
-      max-width: 30em;
-      font-size: 1rem;
-    }
-
-    div.guestbook-comment-meta {
-      display: block;
-      max-width: 30em;
-      font-size: 1rem;
-      text-align: right;
-    }
-  </style>
-
+  <link href="/guestbook.css" rel="stylesheet">
 </head>
 
 <body>
@@ -75,7 +16,7 @@
     <div class="guestbook-form">
       <label for="name" class="guestbook">Name
       </label>
-      <input id="name" class="guestbook" type="text" aria-describedby="name-desc" style="width: 100%;">
+      <input id="name" class="guestbook" type="text" aria-describedby="name-desc">
       <label for="email" class="guestbook">Email
         <span class="guestbook">(optional)</span>
       </label>
@@ -98,40 +39,11 @@
 
   </div>
 
-
   <script>
-    'use strict';
     // CHANGE THIS TO THE URL YOU WANT!
     var serverURL = "http://localhost:8054"
-
-
-    var btn = document.getElementById("btn");
-    var guestbook = document.getElementById("guestbook");
-
-    function myCallback(acptlang) {
-      if (acptlang.Message != "") {
-        alert(acptlang.Message);
-      }
-      console.log(acptlang);
-      guestbook.innerHTML = "";
-      console.log(acptlang.Entries.length);
-      for (var i = 0; i < acptlang.Entries.length; i++) {
-        guestbook.innerHTML = guestbook.innerHTML + `<div class="guestbook-comment"> <div class="guestbook-comment-text"> ${acptlang.Entries[i].Message}</div><div class="guestbook-comment-meta"> - ${acptlang.Entries[i].Name}</div><div class="guestbook-comment-meta">${acptlang.Entries[i].DateString}</div><div class="guestbook-comment-meta">${acptlang.Entries[i].Location}</div></div>`
-
-      }
-    }
-
-    function jsonp() {
-      guestbook.innerHTML = "Loading ...";
-      var tag = document.createElement("script");
-      var message = encodeURIComponent(document.querySelector('#message').value);
-      var name = encodeURIComponent(document.querySelector('#name').value);
-      var email = encodeURIComponent(document.querySelector('#email').value);
-      tag.src = `${serverURL}/jsonp?callback=myCallback&message=${message}&name=${name}&email=${name}`;
-      document.querySelector("head").appendChild(tag);
-    }
-    btn.addEventListener("click", jsonp);
-    window.onload = jsonp;
+  </script>
+  <script src="/guestbook.js">
   </script>
   <!-- End of guestbook -->
 
