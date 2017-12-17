@@ -1,7 +1,7 @@
 'use strict';
 var btn = document.getElementById("btn");
 var guestbook = document.getElementById("guestbook");
-var serverURL = ""
+var serverURL = "http://localhost:8054"
 
 function myCallback(acptlang) {
   if (acptlang.Message != "") {
@@ -11,7 +11,7 @@ function myCallback(acptlang) {
   guestbook.innerHTML = "";
   console.log(acptlang.Entries.length);
   for (var i = 0; i < acptlang.Entries.length; i++) {
-    guestbook.innerHTML = guestbook.innerHTML + ` <li class="pa3 pa4-ns bb b--black-10"> <span class="f5 db lh-copy measure i">${acptlang.Entries[i].Message}</span> <span class="f5 db lh-copy measure tr"> - ${acptlang.Entries[i].Name}</span> <span class="f5 db lh-copy measure tr">${acptlang.Entries[i].DateString}</span> <span class="f5 db lh-copy measure tr">${acptlang.Entries[i].Location}</span></li>`
+    guestbook.innerHTML = guestbook.innerHTML + `<div class="guestbook-comment"> <div class="guestbook-comment-text"> ${acptlang.Entries[i].Message}</div><div class="guestbook-comment-meta"> - ${acptlang.Entries[i].Name}</div><div class="guestbook-comment-meta">${acptlang.Entries[i].DateString}</div><div class="guestbook-comment-meta">${acptlang.Entries[i].Location}</div></div>`
 
   }
 }

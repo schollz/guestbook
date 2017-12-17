@@ -124,7 +124,7 @@ func jsonpHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	flags.OneEntryPerPersonPerDay = true
+	flags.OneEntryPerPersonPerDay = false
 	http.HandleFunc("/jsonp", jsonpHandler)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		index, _ := ioutil.ReadFile("index.html")

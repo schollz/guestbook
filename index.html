@@ -1,32 +1,51 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Guestbook</title>
-  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html {
+      line-height: 1.5;
+      max-width: 38rem;
+    }
+  </style>
+  <link href="/guestbook.css" rel="stylesheet" type="text/css">
 </head>
+
 <body>
-  <article class="pa3 pa5-ns">
-    <h1 class="f3 f2-m f1-l">Guestbook</h1>
+  <!-- Start of guestbook -->
+  <div class="guestbook">
+
+    <h1>Guestbook</h1>
+
+    <!-- Guestbook form -->
     <div class="black-80 measure-wide">
-      <label for="name" class="f6 b db mb2">Name
+      <label for="name" class="guestbook">Name
       </label>
-      <input id="name" class="input-reset ba b--black-20 pa2 mb2 db w-100" type="text" aria-describedby="name-desc">
-      <label for="email" class="f6 b db mb2">Email
-        <span class="normal black-60">(optional)</span>
+      <input id="name" class="guestbook" type="text" aria-describedby="name-desc">
+      <label for="email" class="guestbook">Email
+        <span class="guestbook">(optional)</span>
       </label>
-      <input id="email" class="input-reset ba b--black-20 pa2 mb2 db w-100" type="text" aria-describedby="name-desc">
-      <label for="message" class="f6 b db mb2">Message
+      <input id="email" class="guestbook" type="text" aria-describedby="name-desc">
+      <label for="message" class="guestbook">Message
       </label>
-      <textarea id="message" name="message" class="input-reset ba b--black-20 pa2 mb2 db w-100" aria-describedby="message-desc"
-        rows=4></textarea>
+      <textarea id="message" name="message" class="guestbook" aria-describedby="message-desc" rows=4></textarea>
       <div class="mt3">
-        <input class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6" type="button" id="btn" value="Submit">
+        <input class="guestbook-button" type="button" id="btn" value="Submit">
       </div>
     </div>
-    <ul class="list pl0 measure-wide">
-      <div id="guestbook" class="measure-wide"></div>
-    </ul>
-  </article>
+
+    <!-- Guestbook comments -->
+    <div class="guestbook-comments">
+      <div id="guestbook" class="measure-wide">
+      </div>
+    </div>
+
+  </div>
+  <!-- End of guestbook -->
+  
   <script src="/guestbook.js"></script>
 </body>
+
 </html>
