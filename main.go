@@ -122,7 +122,7 @@ func jsonpHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	flags.OneEntryPerPersonPerDay = false
+	flags.OneEntryPerPersonPerDay = true
 	http.HandleFunc("/jsonp", jsonpHandler)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "index.html")
