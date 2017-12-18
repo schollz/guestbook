@@ -12,7 +12,7 @@
 
 <p align="center">A really simple guestbook to make the internet feel like 1993 again.</p>
 
-This is just a guestbook. Its like a comments page but you can't reply to anyone. Also you can only post once. 
+This is just a guestbook. Its like a comments page but you can't reply to anyone. Also you can only post once. Also when you post it will share where you are from (determined from your IP). Try a demo at https://guestbook.schollz.com.
 
 The backend server is a few hundred lines of Go. It automatically takes care of storage (in a JSON file) and formatting and sanitizing of the input.
 
